@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenServer", "TokenServer\TokenServer.csproj", "{7D6B17B5-99C2-4E0E-9088-B3EEB02D1B3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecuredApi", "SecuredApi\SecuredApi.csproj", "{D6002748-9EFA-4F05-9B22-A1EA6F10648F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{6320ADE0-C8D7-41DE-81BE-67DC01004683}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcClient", "MvcClient\MvcClient.csproj", "{27DB6F1C-003B-4291-99D6-05E5E1B35022}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D6B17B5-99C2-4E0E-9088-B3EEB02D1B3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D6B17B5-99C2-4E0E-9088-B3EEB02D1B3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D6B17B5-99C2-4E0E-9088-B3EEB02D1B3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D6B17B5-99C2-4E0E-9088-B3EEB02D1B3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6002748-9EFA-4F05-9B22-A1EA6F10648F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6002748-9EFA-4F05-9B22-A1EA6F10648F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6002748-9EFA-4F05-9B22-A1EA6F10648F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6002748-9EFA-4F05-9B22-A1EA6F10648F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6320ADE0-C8D7-41DE-81BE-67DC01004683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6320ADE0-C8D7-41DE-81BE-67DC01004683}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6320ADE0-C8D7-41DE-81BE-67DC01004683}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6320ADE0-C8D7-41DE-81BE-67DC01004683}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27DB6F1C-003B-4291-99D6-05E5E1B35022}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27DB6F1C-003B-4291-99D6-05E5E1B35022}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27DB6F1C-003B-4291-99D6-05E5E1B35022}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27DB6F1C-003B-4291-99D6-05E5E1B35022}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
