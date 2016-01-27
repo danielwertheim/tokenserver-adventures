@@ -24,6 +24,7 @@ namespace MvcClient
         public string RedirectUriAfterLogin { get; set; }
         public string RedirectUriAfterLogout { get; set; }
         public string[] ClaimTypesOfInterest { get; }
+        public Func<ClaimsIdentity, Task<Claim[]>> OnTransformingValidatedIdentity { internal get; set; }
 
         public UseCookieAuthAgainstTokenServerOptions(string tokenServerEndPoint, string clientId, string[] claimTypesOfInterest)
         {
@@ -81,7 +82,7 @@ namespace MvcClient
 
                 Notifications = new OpenIdConnectAuthenticationNotifications
                 {
-                    SecurityTokenValidated = notification =>
+                    SecurityTokenValidated = async notification =>
                     {
                         var claimsIdentity = notification.AuthenticationTicket.Identity;
                         var transformedIdentity = new ClaimsIdentity(
@@ -100,7 +101,12 @@ namespace MvcClient
                             transformedIdentity,
                             notification.AuthenticationTicket.Properties);
 
-                        return Task.CompletedTask;
+                        if (options.OnTransformingValidatedIdentity != null)
+                        {
+                            var additionalClaims = await options.OnTransformingValidatedIdentity(claimsIdentity).ConfigureAwait(false);
+                            if(additionalClaims != null && additionalClaims.Any())
+                                transformedIdentity.AddClaims(additionalClaims);
+                        }
                     },
                     RedirectToIdentityProvider = notification =>
                     {

@@ -1,4 +1,6 @@
-﻿using Owin;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using Owin;
 using Shared;
 
 namespace MvcClient
@@ -18,7 +20,10 @@ namespace MvcClient
             {
                 Scopes = new[] { "openid", "profile", "email", "roles" },
                 RedirectUriAfterLogin = EndPointConstants.MvcClient,
-                RedirectUriAfterLogout = EndPointConstants.MvcClient
+                RedirectUriAfterLogout = EndPointConstants.MvcClient,
+
+                //Can use the orgIdentity to look up information about user in e.g. IdentityServer
+                OnTransformingValidatedIdentity = orgIdentity => Task.FromResult(new[] { new Claim("hobby", "baking") })
             };
             app.UseCookieAuthAgainstTokenServer(options);
         }
