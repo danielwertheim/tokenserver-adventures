@@ -21,7 +21,8 @@ namespace TokenServer
                         new Claim(Constants.ClaimTypes.GivenName, "Bob"),
                         new Claim(Constants.ClaimTypes.FamilyName, "Smith"),
                         new Claim(Constants.ClaimTypes.Email, "bob@none.com"),
-                        new Claim(Constants.ClaimTypes.Name, "Bob Smith")
+                        new Claim(Constants.ClaimTypes.Name, "Bob Smith"),
+                        new Claim(Constants.ClaimTypes.Role, "reviewers")
                     }
                 }
             };

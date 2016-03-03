@@ -1,5 +1,8 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using IdentityModel.Client;
 using Owin;
 using Shared;
 
@@ -9,7 +12,7 @@ namespace MvcClient
     {
         public void Configuration(IAppBuilder app)
         {
-            var options = new UseCookieAuthAgainstTokenServerOptions(EndPointConstants.TokerServer, ClientConstants.MvcClientId, new[]
+            var options = new UseCookieAuthAgainstTokenServerOptions(EndPointConstants.TokenServer, ClientConstants.MvcClientId, new[]
             {
                 ClaimTypeKeys.Subject,
                 ClaimTypeKeys.GivenName,
@@ -18,12 +21,24 @@ namespace MvcClient
                 ClaimTypeKeys.Role
             })
             {
-                Scopes = new[] { "openid", "profile", "email", "roles" },
+                ResponseType = ResponseType.IdToken | ResponseType.AccessToken,
+                Scopes = new[] { "openid", "profile", "roles", ResourceScopes.SecuredApi },
                 RedirectUriAfterLogin = EndPointConstants.MvcClient,
                 RedirectUriAfterLogout = EndPointConstants.MvcClient,
+                //OnTransformingValidatedIdentity = async orgIdentity =>
+                //{
 
-                //Can use the orgIdentity to look up information about user in e.g. IdentityServer
-                OnTransformingValidatedIdentity = orgIdentity => Task.FromResult(new[] { new Claim("hobby", "baking") })
+                //},
+                OnLookupUserInfo = async accesstoken =>
+                {
+                    var userInfoClient = new UserInfoClient(new Uri(EndPointConstants.TokenServer + "/connect/userinfo"), accesstoken);
+                    var userInfo = await userInfoClient.GetAsync();
+
+                    var claims = new List<Claim>();
+                    userInfo.Claims.ToList().ForEach(ui => claims.Add(new Claim(ui.Item1, ui.Item2)));
+
+                    return claims.ToArray();
+                }
             };
             app.UseCookieAuthAgainstTokenServer(options);
         }

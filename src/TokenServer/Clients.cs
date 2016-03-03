@@ -35,7 +35,33 @@ namespace TokenServer
                         Constants.StandardScopes.OpenId,
                         Constants.StandardScopes.Profile,
                         Constants.StandardScopes.Email,
-                        Constants.StandardScopes.Roles
+                        Constants.StandardScopes.Roles,
+                        ResourceScopes.SecuredApi
+                    }
+                },
+                new Client
+                {
+                    Enabled = true,
+                    AllowRememberConsent = false,
+                    ClientId = "swashy",
+                    ClientName = "Swashy",
+                    Flow = Flows.Implicit,
+                    AllowedCorsOrigins = new List<string>
+                    {
+                        "https://localhost:44302",
+                        "https://localhost:44302"
+                    },
+                    RedirectUris = new List<string>
+                    {
+                        "https://localhost:44302/tokenclient/popup.html"
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        Constants.StandardScopes.OpenId,
+                        Constants.StandardScopes.Profile,
+                        Constants.StandardScopes.Email,
+                        Constants.StandardScopes.Roles,
+                        ResourceScopes.SecuredApi
                     }
                 }
             };

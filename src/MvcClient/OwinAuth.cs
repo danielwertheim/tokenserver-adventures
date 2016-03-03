@@ -25,6 +25,7 @@ namespace MvcClient
         public string RedirectUriAfterLogout { get; set; }
         public string[] ClaimTypesOfInterest { get; }
         public Func<ClaimsIdentity, Task<Claim[]>> OnTransformingValidatedIdentity { internal get; set; }
+        public Func<string, Task<Claim[]>> OnLookupUserInfo { internal get; set; }
 
         public UseCookieAuthAgainstTokenServerOptions(string tokenServerEndPoint, string clientId, string[] claimTypesOfInterest)
         {
@@ -45,15 +46,18 @@ namespace MvcClient
     [Flags]
     public enum ResponseType
     {
-        IdToken = 0,
-        AccessToken = 1
+        Default = 0,
+        IdToken = 1,
+        AccessToken = 2
     }
 
     internal static class ResponseTypeExtensions
     {
         internal static string AsString(this ResponseType value)
         {
-            return $"{(value.HasFlag(ResponseType.IdToken) ? "id_token" : null)} {(value.HasFlag(ResponseType.AccessToken) ? "token" : null)}".Trim();
+            return value == ResponseType.Default
+                ? "id_token"
+                : $"{(value.HasFlag(ResponseType.IdToken) ? "id_token" : null)} {(value.HasFlag(ResponseType.AccessToken) ? "token" : null)}".Trim();
         }
     }
 
@@ -69,7 +73,7 @@ namespace MvcClient
                 AuthenticationType = "Cookies"
             });
 
-            app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
+            var openIdConnectAuthenticationOptions = new OpenIdConnectAuthenticationOptions
             {
                 Authority = options.TokenServerEndpoint,
                 ClientId = options.ClientId,
@@ -79,7 +83,6 @@ namespace MvcClient
                 ResponseType = options.ResponseType.AsString(),
                 Scope = string.Join(" ", options.Scopes),
                 SignInAsAuthenticationType = "Cookies",
-
                 Notifications = new OpenIdConnectAuthenticationNotifications
                 {
                     SecurityTokenValidated = async notification =>
@@ -107,6 +110,13 @@ namespace MvcClient
                             if(additionalClaims != null && additionalClaims.Any())
                                 transformedIdentity.AddClaims(additionalClaims);
                         }
+
+                        if (options.OnLookupUserInfo != null && notification.ProtocolMessage.AccessToken != null)
+                        {
+                            var additionalClaims = await options.OnLookupUserInfo(notification.ProtocolMessage.AccessToken).ConfigureAwait(false);
+                            if (additionalClaims != null && additionalClaims.Any())
+                                transformedIdentity.AddClaims(additionalClaims);
+                        }
                     },
                     RedirectToIdentityProvider = notification =>
                     {
@@ -120,7 +130,8 @@ namespace MvcClient
                         return Task.CompletedTask;
                     }
                 }
-            });
+            };
+            app.UseOpenIdConnectAuthentication(openIdConnectAuthenticationOptions);
 
             return app;
         }

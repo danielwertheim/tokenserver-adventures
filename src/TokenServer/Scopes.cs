@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using IdentityServer3.Core;
 using IdentityServer3.Core.Models;
+using Shared;
 
 namespace TokenServer
 {
@@ -8,20 +9,18 @@ namespace TokenServer
     {
         public static IEnumerable<Scope> Get()
         {
-            var email = StandardScopes.Email;
-            //email.IncludeAllClaimsForUser = true;
-            //email.Claims.ForEach(c => c.AlwaysIncludeInIdToken = true);
-
             return new List<Scope>
             {
                 StandardScopes.OpenId,
                 StandardScopes.Profile,
-                email,
+                StandardScopes.Email,
+                StandardScopes.Roles,
                 new Scope
                 {
                     Enabled = true,
-                    Name = StandardScopes.Roles.Name,
-                    Type = ScopeType.Identity,
+                    Name = ResourceScopes.SecuredApi,
+                    DisplayName = "Secured API",
+                    Type = ScopeType.Resource,
                     Claims = new List<ScopeClaim>
                     {
                         new ScopeClaim(Constants.ClaimTypes.Role)
